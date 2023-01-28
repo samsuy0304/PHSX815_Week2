@@ -2,6 +2,7 @@
 
 import math
 import numpy as np
+import sys
 
 #################
 # Random class
@@ -45,7 +46,7 @@ class Random:
     # function returns a random integer (0 or 1) according to a Bernoulli distr.
     def Bernoulli(self, p=0.5):
         if p < 0. or p > 1.:
-            return 1
+            raise ValueError("Probability must be between 0 and 1.")
         
         R = self.rand()
 
@@ -68,3 +69,29 @@ class Random:
       X = -math.log(R)/beta
 
       return X
+    
+    # Function returns a random number of success after n trials according to binomial.
+    def Binomial(self, n, p):
+        #Check the validity of the inputs.
+        if n < 0 or p < 0 or p > 1:
+            return None
+        #Generate a random number which will determine the highest number of successes.
+        cdf = 0.
+        x = 0
+        u = self.rand()
+        while cdf < u:
+            x += 1
+            cdf += math.comb(n, x)*(p**x)*((1-p)**(n-x))
+        return x
+
+    # Returns a random integer that is index of the categories provided in the probability list.
+    #p is list of probability [0.5,0.5] for a coint toss
+    def Categorical(self, p):
+    # cumulative probability to create a map of the categories
+        cdf = np.cumsum(p)
+        # generate a random cdf for for an item.
+        rcdf = self.rand()
+        # find the corresponding outcome
+        for i, val in enumerate(cdf):
+            if rcdf <= val:
+                return i
