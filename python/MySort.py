@@ -5,7 +5,7 @@ import numpy as np
 
 # import our Random class from python/Random.py file
 sys.path.append(".")
-from python.Random import Random
+from Random import Random
 
 #################
 # MySort class

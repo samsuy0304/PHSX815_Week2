@@ -5,10 +5,16 @@ import sys
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import time
+import statistics
+
 
 # import our Random class from python/Random.py file
 sys.path.append(".")
-from python.MySort import MySort
+from MySort import MySort
+
+def Average(lst):
+    return sum(lst) / len(lst)
 
 # main function for our CookieAnalysis Python code
 if __name__ == "__main__":
@@ -62,3 +68,25 @@ if __name__ == "__main__":
     # times_avg = Sorter.QuickSort(times_avg)
 
     # ADD YOUR CODE TO PLOT times AND times_avg HERE
+    print(times)
+    print(times_avg)
+    variance = statistics.variance(times)
+    q25 = np.quantile(times, 0.25)
+    q50 = np.quantile(times, 0.5)
+    q75 = np.quantile(times, 0.75)
+    
+    
+    plt.hist(times, 40, density=True, facecolor='r', alpha=0.75, label='Times')
+    plt.hist(times_avg,  40, density=True, facecolor='g', alpha=0.75, label='Average')
+    plt.axvline(q25, color='k', linestyle='dashed', linewidth=1, label ='Q25')
+    plt.axvline(q50, color='k', linestyle='dashed', linewidth=1, label ='Q50')
+    plt.axvline(q75, color='k', linestyle='dashed', linewidth=1, label ='Q75')
+    plt.axvline(Average(times), color='b', linestyle='dashed', linewidth=1, label ='Times Average')
+    
+    plt.title('Cookie Time Probability')
+    plt.xlabel('Time')
+    plt.ylabel('Probability')
+    plt.legend()
+    plt.show()
+    plt.savefig("TimesHistogramPlot.png")
+    
